@@ -7,10 +7,9 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Catalog.API.csproj", "Catalog.API/"]
-RUN dotnet restore "Catalog.API.csproj"
+COPY ["Catalog.API.csproj", "./"]
+RUN dotnet restore "./Catalog.API.csproj"
 COPY . .
-WORKDIR "/src/Catalog.API"
 RUN dotnet build "Catalog.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -20,5 +19,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Catalog.API.dll"]
+
 
 
